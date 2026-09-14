@@ -21,3 +21,5 @@ Thumbs.db
 /bootstrap/cache/*.php
 !bootstrap/cache/.gitignore
 /storage/logs/*.log
+ARCHITECTURE.md
+REBUILD_PLAN.md
