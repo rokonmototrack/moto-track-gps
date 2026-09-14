@@ -13,11 +13,10 @@ class UsersTableSeeder extends Seeder {
     public function run()
     {
         $now = date('Y-m-d H:i:s');
-        $password = 'Seo2024!';
+        $password = 'Codex2024!';
 
         DB::table('users')->insert([
             'email' => 'admin@server.com',
-            'email_verified_at' => $now,
             'password' => Hash::make($password),
             'group_id' => 1,
             'map_id' => config('tobuli.main_settings.default_map'),

@@ -19,6 +19,8 @@ class CreateStDistanceSphere2dFunction extends Migration
 
         DB::unprepared("
         CREATE FUNCTION `ST_DISTANCE_SPHERE_2D`(`lat1` DOUBLE, `lng1` DOUBLE, `lat2` DOUBLE, `lng2` DOUBLE) RETURNS DOUBLE
+            DETERMINISTIC
+            READS SQL DATA
             BEGIN
             
             DECLARE distance DOUBLE;

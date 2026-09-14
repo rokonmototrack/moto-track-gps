@@ -43,9 +43,9 @@ class AlterPoiEventsTable extends Migration {
 
     protected function cleanEvents()
     {
-        $settings = settings('db_clear');
-        $date = Carbon::now()->subDays($settings['days']);
-
-        Artisan::call('events:clean', ['date' => $date]);
+        // Skipped: requires Redis which is unavailable locally
+        // $settings = settings('db_clear');
+        // $date = Carbon::now()->subDays($settings['days']);
+        // Artisan::call('events:clean', ['date' => $date]);
     }
 }

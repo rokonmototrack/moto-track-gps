@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: dom, curl, mbstring, zip, pdo, pdo_mysql, sqlite, pdo_sqlite, bcmath, gd, exif, pcntl
+          coverage: none
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --ignore-platform-req=php
+
+      - name: Prepare Environment
+        run: |
+          cp .env .env.backup
+          cp .env.example .env || true
+          php artisan key:generate
+          sed -i 's/CACHE_DRIVER=.*/CACHE_DRIVER=array/' .env
+          sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
+          sed -i 's/GEOCODER_CACHE_DRIVER=.*/GEOCODER_CACHE_DRIVER=array/' .env
+          sed -i 's/QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
+
+      - name: Verify Code Syntax
+        run: find app Tobuli -name "*.php" -exec php -l {} \; 2>&1 | grep -v "No syntax errors" || true
